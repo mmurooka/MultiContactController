@@ -1,6 +1,8 @@
 #include <functional>
 #include <limits>
 
+#include <mc_rtc/clock.h>
+
 #include <CCC/Constants.h>
 #include <CCC/DdpCentroidal.h>
 
@@ -68,10 +70,20 @@ void CentroidalManagerDDP::addToLogger(mc_rtc::Logger & logger)
   logger.addLogEntry(config_.name + "_DDP_iter", this, [this]() {
     return ddp_->ddp_solver_->traceDataList().empty() ? 0 : ddp_->ddp_solver_->traceDataList().back().iter;
   });
+
+  MC_RTC_LOG_HELPER(config().name + "_DDP_numCalcRefData", numCalcRefData_);
+  MC_RTC_LOG_HELPER(config().name + "_DDP_durationCalcRefData", durationCalcRefData_);
+  MC_RTC_LOG_HELPER(config().name + "_DDP_numCalcMotionParam", numCalcMotionParam_);
+  MC_RTC_LOG_HELPER(config().name + "_DDP_durationCalcMotionParam", durationCalcMotionParam_);
 }
 
 void CentroidalManagerDDP::runMpc()
 {
+  numCalcRefData_ = 0.0;
+  durationCalcRefData_ = 0.0;
+  numCalcMotionParam_ = 0.0;
+  durationCalcMotionParam_ = 0.0;
+
   CCC::DdpCentroidal::InitialParam initialParam;
   initialParam.pos = controlData_.mpcCentroidalPose.translation();
   initialParam.vel = controlData_.mpcCentroidalVel.linear();
@@ -107,8 +119,10 @@ void CentroidalManagerDDP::runMpc()
   controlData_.plannedCentroidalAccel.angular().setZero();
 }
 
-CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t) const
+CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double t)
 {
+  auto startTime = mc_rtc::clock::now();
+
   CCC::DdpCentroidal::MotionParam motionParam;
 
   const auto & contactList = ctl().limbManagerSet_->contactList(t);
@@ -137,14 +151,24 @@ CCC::DdpCentroidal::MotionParam CentroidalManagerDDP::calcMpcMotionParam(double 
     }
   }
 
+  numCalcMotionParam_++;
+  durationCalcMotionParam_ +=
+      1e3 * std::chrono::duration_cast<std::chrono::duration<double>>(mc_rtc::clock::now() - startTime).count();
+
   return motionParam;
 }
 
-CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcMpcRefData(double t) const
+CCC::DdpCentroidal::RefData CentroidalManagerDDP::calcMpcRefData(double t)
 {
+  auto startTime = mc_rtc::clock::now();
+
   CCC::DdpCentroidal::RefData refData;
 
   refData.pos = calcRefData(t).centroidalPose.translation();
+
+  numCalcRefData_++;
+  durationCalcRefData_ +=
+      1e3 * std::chrono::duration_cast<std::chrono::duration<double>>(mc_rtc::clock::now() - startTime).count();
 
   return refData;
 }

@@ -74,12 +74,12 @@ protected:
   /** \brief Calculate motion parameter of MPC.
       \param t time
    */
-  CCC::DdpCentroidal::MotionParam calcMpcMotionParam(double t) const;
+  CCC::DdpCentroidal::MotionParam calcMpcMotionParam(double t);
 
   /** \brief Calculate reference data of MPC.
       \param t time
    */
-  CCC::DdpCentroidal::RefData calcMpcRefData(double t) const;
+  CCC::DdpCentroidal::RefData calcMpcRefData(double t);
 
 protected:
   //! Configuration
@@ -87,5 +87,17 @@ protected:
 
   //! DDP
   std::shared_ptr<CCC::DdpCentroidal> ddp_;
+
+  //! Number of calls of calcRefData
+  int numCalcRefData_ = 0.0;
+
+  //! Duration of calcRefData [msec]
+  double durationCalcRefData_ = 0.0;
+
+  //! Number of calls of calcMotionParam
+  int numCalcMotionParam_ = 0.0;
+
+  //! Duration of calcMotionParam [msec]
+  double durationCalcMotionParam_ = 0.0;
 };
 } // namespace MCC
