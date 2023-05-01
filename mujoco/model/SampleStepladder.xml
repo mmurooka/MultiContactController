@@ -1,0 +1,20 @@
+<mujoco model="SampleStepladder">
+  <compiler angle="radian" autolimits="true"/>
+
+  <worldbody>
+    <body pos="0.2 0 0">
+      <geom size="0.01 1 0.01" pos="0.258819 0.3 0.965926" quat="0.701057 0.701057 0.092296 -0.092296" type="box" rgba="0.3 0.5 0.2 1"
+            condim="3" group="1"/>
+      <geom size="0.01 1 0.01" pos="0.258819 -0.3 0.965926" quat="0.701057 0.701057 0.092296 -0.092296" type="box" rgba="0.3 0.5 0.2 1"
+            condim="3" group="1"/>
+      <geom size="0.04 0.3 0.01" pos="0.0535898 0 0.19" type="box" rgba="0.3 0.5 0.2 1"
+            condim="3" group="1"/>
+      <geom size="0.04 0.3 0.01" pos="0.10718 0 0.39" type="box" rgba="0.3 0.5 0.2 1"
+            condim="3" group="1"/>
+      <geom size="0.04 0.3 0.01" pos="0.16077 0 0.59" type="box" rgba="0.3 0.5 0.2 1"
+            condim="3" group="1"/>
+      <geom size="0.04 0.3 0.01" pos="0.214359 0 0.79" type="box" rgba="0.3 0.5 0.2 1"
+            condim="3" group="1"/>
+    </body>
+  </worldbody>
+</mujoco>

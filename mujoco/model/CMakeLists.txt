@@ -1,5 +1,6 @@
 set(MODEL_NAME_LIST
   SampleField
+  SampleStepladder
 )
 
 foreach(MODEL_NAME IN LISTS MODEL_NAME_LIST)
