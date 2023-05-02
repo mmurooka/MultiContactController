@@ -1,0 +1,4 @@
+sensors:
+  - topicName: /mujoco/tactile_sensor
+    tactileSensorFrameName: jvrc1_back_tactile_sensor
+    forceSensorName: BackForceSensor

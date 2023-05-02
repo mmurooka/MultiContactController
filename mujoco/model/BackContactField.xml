@@ -1,0 +1,24 @@
+<mujoco model="BackContactField">
+  <compiler angle="radian" autolimits="true"/>
+  <!-- <option noslip_iterations="50" noslip_tolerance="1e-10"/> -->
+
+  <!-- <worldbody> -->
+  <!--   <geom size="0.025 0.025 0.01" pos="-0.21 0 1.2" quat="0.707107 0 0.707107 0" type="box" rgba="0.3 0.5 0.2 1" -->
+  <!--         condim="3" group="1" density="0"/> -->
+  <!-- </worldbody> -->
+
+  <asset>
+    <texture name="BlockBack" type="2d" builtin="checker" width="512" height="512" rgb1="0.4 0.4 0.4" rgb2="0.1 0.1 0.4"/>
+    <material name="BlockBack" texture="BlockBack" texrepeat="101 101" texuniform="false" reflectance="0"/>
+  </asset>
+  <worldbody>
+    <body pos="-0.21 0 1.1" quat="0.707107 0 0.707107 0">
+      <composite type="box" count="7 5 3" spacing="0.04">
+        <skin texcoord="false" material="BlockBack"/>
+        <geom type="capsule" size="0.01 0.01" rgba="0.8 0.2 0.1 1"
+              condim="3" group="3"/>
+        <joint kind="main" solreffix="0.03 0.1" solimpfix="0 0.1 0.01"/>
+      </composite>
+    </body>
+  </worldbody>
+</mujoco>

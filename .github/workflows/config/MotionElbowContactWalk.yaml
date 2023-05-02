@@ -1,0 +1,248 @@
+# OverwriteConfigKeys: [NoSensors]
+
+Plugins: [TactileSensor]
+
+transitions:
+  - [MCC::Initial_, OK, MCC::ConfigMotionRightElbow_, Auto]
+
+states:
+  MCC::Initial_:
+    base: MCC::Initial
+    configs:
+      autoStartTime: 2.0
+
+  MCC::ConfigMotionRightElbow_:
+    base: MCC::ConfigMotion
+    configs:
+      baseTime: Relative
+      stepCommandList:
+        - limb: RightElbow
+          type: Add
+          pose:
+            translation: [0.1, -0.65, 1.0]
+            rotation: [-0.785398, 0, 0]
+          startTime: 2.0
+          endTime: 5.0
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+          swingConfig:
+            approachOffset: [0, 0, 0.1]
+        - limb: LeftFoot
+          type: Add
+          startTime: 6.0
+          endTime: 7.0
+          pose:
+            translation: [0.2, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 7.5
+          endTime: 8.5
+          pose:
+            translation: [0.2, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightElbow
+          type: Add
+          pose:
+            translation: [0.3, -0.65, 1.0]
+            rotation: [-0.785398, 0, 0]
+          startTime: 9.0
+          endTime: 12.0
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 13.0
+          endTime: 14.0
+          pose:
+            translation: [0.4, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 14.5
+          endTime: 15.5
+          pose:
+            translation: [0.4, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightElbow
+          type: Add
+          pose:
+            translation: [0.5, -0.65, 1.0]
+            rotation: [-0.785398, 0, 0]
+          startTime: 16.0
+          endTime: 19.0
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: LeftFoot
+          type: Add
+          startTime: 20.0
+          endTime: 21.0
+          pose:
+            translation: [0.6, 0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightFoot
+          type: Add
+          startTime: 21.5
+          endTime: 22.5
+          pose:
+            translation: [0.6, -0.1, 0]
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+        - limb: RightElbow
+          type: Remove
+          startTime: 23.0
+          endTime: 26.0
+          swingConfig:
+            withdrawOffset: [0, 0, 0.1]
+      nominalCentroidalPoseList:
+        - time: 0.0
+          pose:
+            translation: [0.0, 0.0, 0.825]
+        - time: 3.5
+          pose:
+            translation: [0.0, -0.05, 0.825]
+        - time: 5.0
+          pose:
+            translation: [0.0, -0.15, 0.825]
+        - time: 9.0
+          pose:
+            translation: [0.0, -0.1, 0.825]
+        - time: 12.0
+          pose:
+            translation: [0.0, -0.15, 0.825]
+        - time: 16.0
+          pose:
+            translation: [0.0, -0.1, 0.825]
+        - time: 19.0
+          pose:
+            translation: [0.0, -0.15, 0.825]
+        - time: 24.5
+          pose:
+            translation: [0.0, -0.05, 0.825]
+        - time: 26.0
+          pose:
+            translation: [0.0, 0.0, 0.825]
+
+LimbTaskList:
+  - type: firstOrderImpedance
+    limb: LeftFoot
+    frame: LeftFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightFoot
+    frame: RightFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftHand
+    frame: LeftHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightHand
+    frame: RightHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightElbow
+    frame: RightElbowFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+
+LimbManagerSet:
+  LimbManager:
+    RightElbow:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [300, 300, 1e3] # [300, 300, 1e4]
+            angular: [80, 80, 40] # [100, 100, 40]
+          spring:
+            linear: [2250, 2250, 0]
+            angular: [0, 0, 400]
+          wrench:
+            linear: [0, 0, 1]
+            angular: [1, 1, 0]
+          # damper:
+          #   linear: [300, 300, 300]
+          #   angular: [40, 40, 40]
+          # spring:
+          #   linear: [2250, 2250, 2250]
+          #   angular: [400, 400, 400]
+          # wrench:
+          #   linear: [0, 0, 0]
+          #   angular: [0, 0, 0]
+
+CentroidalManager:
+  method: DDP
+  horizonDuration: 1.0 # [sec]
+  horizonDt: 0.01 # [sec]
+  ddpMaxIter: 1
+
+robots:
+  # Environment models
+  sample_field:
+    module: MCC/ElbowContactWalkField
+
+  # Robot-specific configurations
+  jvrc1:
+    frames:
+      - name: LeftHandGraspFrame
+        parent: l_wrist
+        X_p_f:
+          translation: [0.0, -0.0085, -0.10]
+      - name: RightHandGraspFrame
+        parent: r_wrist
+        X_p_f:
+          translation: [0.0, 0.0085, -0.10]
+      - name: RightElbowFrame
+        parent: R_ELBOW_P_S
+        X_p_f:
+          translation: [-0.06975397769348207, 0, -0.0720193897773116]
+          rotation: [0, 1.5708, 0]
+
+    Contacts:
+      Surface:
+        - name: LeftFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: RightFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: RightElbow
+          vertices: [[-0.05, -0.03, 0.0], [-0.05, 0.03, 0.0], [0.05, 0.03, 0.0], [0.05, -0.03, 0.0]]
+
+      Grasp:
+        - name: LeftHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+        - name: RightHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]

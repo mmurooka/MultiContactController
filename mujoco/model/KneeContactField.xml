@@ -1,0 +1,35 @@
+<mujoco model="KneeContactField">
+  <compiler angle="radian" autolimits="true"/>
+  <option noslip_iterations="50" noslip_tolerance="1e-10"/>
+
+  <asset>
+    <hfield name="knee_contact_hfield" file="/home/mmurooka/ros/ws_bwc/src/isri-aist/MultiContactController/mujoco/model/knee_contact_hfield.png"
+            size="0.05 0.05 0.001 0.01"/>
+  </asset>
+  <worldbody>
+    <geom size="0.01 0.05" pos="0.4 -0.3 1" quat="0 1 0 0" type="cylinder" rgba="0.3 0.5 0.2 1"
+          condim="3" group="1" density="0"/>
+    <!-- <geom size="0.05 0.05 0.01" pos="0.4 0.05 0.34" type="box" rgba="0.3 0.5 0.2 1" -->
+    <!--       condim="3" group="1" density="0"/> -->
+    <geom pos="0.4 0.05 0.35" euler="0 0 0" type="hfield" hfield="knee_contact_hfield" rgba="0.1 0.8 0.1 1"
+          condim="3" group="1" density="0"/>
+  </worldbody>
+
+  <!-- <asset> -->
+  <!--   <texture name="BlockKnee" type="2d" builtin="checker" width="512" height="512" rgb1="0.4 0.4 0.4" rgb2="0.1 0.1 0.4"/> -->
+  <!--   <material name="BlockKnee" texture="BlockKnee" texrepeat="101 101" texuniform="false" reflectance="0"/> -->
+  <!-- </asset> -->
+  <!-- <worldbody> -->
+  <!--   <geom size="0.01 0.05" pos="0.4 -0.3 1" quat="0 1 0 0" type="cylinder" rgba="0.3 0.5 0.2 1" -->
+  <!--         condim="3" group="1" density="0"/> -->
+
+  <!--   <body pos="0.4 0.05 0.34"> -->
+  <!--     <composite type="box" count="5 5 2" spacing="0.02"> -->
+  <!--       <skin texcoord="false" material="BlockKnee"/> -->
+  <!--       <geom type="capsule" size="0.005 0.005" rgba="0.8 0.2 0.1 1" -->
+  <!--             condim="3" group="3"/> -->
+  <!--       <joint kind="main" solreffix="0.03 0.1" solimpfix="0 0.1 0.01"/> -->
+  <!--     </composite> -->
+  <!--   </body> -->
+  <!-- </worldbody> -->
+</mujoco>

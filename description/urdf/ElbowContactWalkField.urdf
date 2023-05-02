@@ -1,0 +1,31 @@
+<robot name="ElbowContactWalkField">
+  <material name="green">
+    <color rgba="0.3 0.5 0.2 1"/>
+  </material>
+  <link name="Root">
+    <inertial>
+      <mass value="1e-06" />
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+  </link>
+  <link name="WallRightElbow">
+    <inertial>
+      <mass value="1e-06" />
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.5 0.0 -0.01" rpy="0.0 -0.0 0.0" />
+      <geometry>
+        <box size="1.0 0.1 0.02" />
+      </geometry>
+      <material name="green" />
+    </visual>
+  </link>
+  <joint name="WallRightElbow" type="fixed">
+    <origin xyz="0 -0.65 1.0" rpy="-0.785398 0 0" />
+    <parent link="Root" />
+    <child link="WallRightElbow" />
+  </joint>
+</robot>

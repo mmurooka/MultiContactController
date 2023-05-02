@@ -1,0 +1,35 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: radian
+name: KneeContactField
+rootLink: Root
+links:
+  -
+    name: Root
+    jointType: fixed
+  -
+    name: BlockLeftKnee
+    parent: Root
+    jointType: fixed
+    material: Field
+    translation: [ 0.4, 0.05, 0.35 ]
+    rotation: [ 0, 1, 0, 0 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0, 0, -0.01 ]
+        geometry: { type: Box, size: [ 0.1, 0.1, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}
+  -
+    name: BlockRightHand
+    parent: Root
+    jointType: fixed
+    material: Field
+    translation: [ 0.4, -0.3, 1.0 ]
+    rotation: [ 0, 1, 0, 0 ]
+    elements:
+      -
+        type: Shape
+        rotation: [ 1, 0, 0, 1.5707963267948966 ]
+        geometry: { type: Cylinder, radius: 0.01, height: 0.1 }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}

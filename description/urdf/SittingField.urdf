@@ -1,0 +1,31 @@
+<robot name="SittingField">
+  <material name="green">
+    <color rgba="0.3 0.5 0.2 1"/>
+  </material>
+  <link name="Root">
+    <inertial>
+      <mass value="1e-06" />
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+  </link>
+  <link name="BlockThigh">
+    <inertial>
+      <mass value="1e-06" />
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 -0.01" rpy="0.0 -0.0 0.0" />
+      <geometry>
+        <box size="0.1 0.5 0.02" />
+      </geometry>
+      <material name="green" />
+    </visual>
+  </link>
+  <joint name="BlockThigh" type="fixed">
+    <origin xyz="0.2 0.0 0.74" rpy="0.0 -0.0 0.0" />
+    <parent link="Root" />
+    <child link="BlockThigh" />
+  </joint>
+</robot>

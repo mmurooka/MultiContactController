@@ -1,3 +1,5 @@
+# Plugins: [TactileSensor]
+
 transitions:
   - [MCC::Initial_, OK, MCC::ConfigMotion1_, Auto]
   - [MCC::ConfigMotion1_, OK, MCC::ConfigMotion2_, Auto]

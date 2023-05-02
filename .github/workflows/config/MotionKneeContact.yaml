@@ -1,0 +1,219 @@
+# OverwriteConfigKeys: [NoSensors]
+
+Plugins: [TactileSensor]
+
+transitions:
+  - [MCC::Initial_, OK, MCC::ConfigMotionLeftKnee_, Auto]
+
+states:
+  MCC::Initial_:
+    base: MCC::Initial
+    configs:
+      autoStartTime: 2.0
+      gripperCommands:
+        - name: l_gripper
+          opening: 1.0
+        - name: r_gripper
+          opening: 1.0
+
+  MCC::ConfigMotionLeftKnee_:
+    base: MCC::ConfigMotion
+    configs:
+      baseTime: Relative
+      stepCommandList:
+        - limb: RightHand
+          pose:
+            translation: [0.4, -0.3, 1.0]
+            rotation: [0, -1.5707963267948966, 0]
+          swingCommand:
+            type: Add
+            startTime: 1.0
+            endTime: 3.0
+            config:
+              approachOffset: [0, 0, 0.05]
+          contactCommandList:
+            - time: 3.0
+              constraint:
+                type: Empty
+            - time: 4.0
+              constraint:
+                type: Grasp
+                fricCoeff: 1.0
+          gripperCommandList:
+            - time: 3.0
+              name: r_gripper
+              config:
+                opening: 0.0
+        - limb: LeftFoot
+          type: Remove
+          startTime: 5.0
+          endTime: 9.0
+          swingConfig:
+            withdrawOffset: [-0.15, 0, 0.25]
+        - limb: LeftKnee
+          type: Add
+          pose:
+            translation: [0.4, 0.05, 0.35]
+            rotation: [0, 0, 0]
+          startTime: 7.0
+          endTime: 10.0
+          constraint:
+            type: Surface
+            fricCoeff: 0.5
+          swingConfig:
+            approachOffset: [-0.03, 0, 0.03]
+        - limb: RightHand
+          swingCommand:
+            type: Remove
+            startTime: 12.0
+            endTime: 14.0
+            config:
+              withdrawOffset: [-0.075, 0, 0.05]
+          contactCommandList:
+            - time: 11.0
+              constraint:
+                type: Empty
+            - time: 12.0
+              constraint: {}
+          gripperCommandList:
+            - time: 11.0
+              name: r_gripper
+              config:
+                opening: 1.0
+      nominalCentroidalPoseList:
+        - time: 0.0
+          pose:
+            translation: [0.074, 0.0, 0.80]
+        - time: 4.0
+          pose:
+            translation: [0.2, 0.0, 0.80]
+        - time: 14.0
+          pose:
+            translation: [0.3, 0.025, 0.80]
+
+LimbTaskList:
+  - type: firstOrderImpedance
+    limb: LeftFoot
+    frame: LeftFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightFoot
+    frame: RightFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftHand
+    frame: LeftHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightHand
+    frame: RightHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftKnee
+    frame: LeftKneeFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+
+LimbManagerSet:
+  LimbManager:
+    LeftKnee:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [300, 300, 2e3]
+            angular: [80, 80, 40]
+          spring:
+            linear: [2250, 2250, 0]
+            angular: [0, 0, 400]
+          wrench:
+            linear: [0, 0, 1]
+            angular: [1, 1, 0]
+          # damper:
+          #   linear: [300, 300, 300]
+          #   angular: [40, 40, 40]
+          # spring:
+          #   linear: [2250, 2250, 2250]
+          #   angular: [400, 400, 400]
+          # wrench:
+          #   linear: [0, 0, 0]
+          #   angular: [0, 0, 0]
+
+CentroidalManager:
+  nominalCentroidalPoseBaseFrame: World
+  limbWeightListForAnchorFrame:
+    LeftFoot: 1.0
+    RightFoot: 1.0
+    LeftKnee: 1.0
+  method: DDP
+  horizonDuration: 1.0 # [sec]
+  horizonDt: 0.01 # [sec]
+  ddpMaxIter: 1
+
+robots:
+  # Environment models
+  sample_field:
+    module: MCC/KneeContactField
+
+  # Robot-specific configurations
+  jvrc1:
+    frames:
+      - name: LeftHandGraspFrame
+        parent: l_wrist
+        X_p_f:
+          translation: [0.0, -0.0085, -0.10]
+      - name: RightHandGraspFrame
+        parent: r_wrist
+        X_p_f:
+          translation: [0.0, 0.0085, -0.10]
+      - name: LeftKneeFrame
+        parent: L_KNEE_S
+        X_p_f:
+          translation: [0.11161884184098951, -3.042248147844262e-09, -0.1063933713699532]
+          rotation: [3.141590255540823, -1.5204375874732723, -3.1415901265290733]
+
+    PostureTask:
+      target:
+        R_SHOULDER_P: [0.7]
+        R_ELBOW_P: [-0.7]
+
+    CoMTask:
+      activeJoints: [
+      "Root",
+      "R_HIP_Y", "R_HIP_R", "R_HIP_P", "R_KNEE", "R_ANKLE_P", "R_ANKLE_R",
+      "L_HIP_Y", "L_HIP_R", "L_HIP_P", "L_KNEE", "L_ANKLE_P", "L_ANKLE_R"
+      ]
+
+    Contacts:
+      Surface:
+        - name: LeftFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: RightFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: LeftKnee
+          vertices: [[-0.03, -0.03, 0.0], [-0.03, 0.03, 0.0], [0.03, 0.03, 0.0], [0.03, -0.03, 0.0]]
+
+      Grasp:
+        - name: LeftHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+        - name: RightHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]

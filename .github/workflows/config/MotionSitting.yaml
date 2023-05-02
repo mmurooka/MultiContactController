@@ -1,0 +1,186 @@
+# OverwriteConfigKeys: [NoSensors]
+
+Plugins: [TactileSensor]
+
+transitions:
+  - [MCC::Initial_, OK, MCC::ConfigMotionSitting_, Auto]
+
+states:
+  MCC::Initial_:
+    base: MCC::Initial
+    configs:
+      autoStartTime: 2.0
+      initialContacts:
+        - limb: LeftThigh
+          type: Surface
+          fricCoeff: 1.0
+        - limb: RightThigh
+          type: Surface
+          fricCoeff: 1.0
+
+  MCC::ConfigMotionSitting_:
+    base: MCC::ConfigMotion
+    configs:
+      baseTime: Relative
+
+LimbTaskList:
+  - type: firstOrderImpedance
+    limb: LeftFoot
+    frame: LeftFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightFoot
+    frame: RightFootCenter
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftHand
+    frame: LeftHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightHand
+    frame: RightHandGraspFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: LeftThigh
+    frame: LeftThighFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+  - type: firstOrderImpedance
+    limb: RightThigh
+    frame: RightThighFrame
+    cutoffPeriod: 0.01
+    weight: 1000.0
+
+LimbManagerSet:
+  LimbManager:
+    LeftThigh:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [300, 300, 1e5]
+            angular: [300, 250, 40]
+          spring:
+            linear: [2250, 2250, 0]
+            angular: [0, 0, 400]
+          wrench:
+            linear: [0, 0, 1]
+            angular: [1, 1, 0]
+          # damper:
+          #   linear: [300, 300, 300]
+          #   angular: [40, 40, 40]
+          # spring:
+          #   linear: [2250, 2250, 2250]
+          #   angular: [400, 400, 400]
+          # wrench:
+          #   linear: [0, 0, 0]
+          #   angular: [0, 0, 0]
+    RightThigh:
+      impedanceGains:
+        MultiContact:
+          damper:
+            linear: [300, 300, 1e5]
+            angular: [300, 250, 40]
+          spring:
+            linear: [2250, 2250, 0]
+            angular: [0, 0, 400]
+          wrench:
+            linear: [0, 0, 1]
+            angular: [1, 1, 0]
+          # damper:
+          #   linear: [300, 300, 300]
+          #   angular: [40, 40, 40]
+          # spring:
+          #   linear: [2250, 2250, 2250]
+          #   angular: [400, 400, 400]
+          # wrench:
+          #   linear: [0, 0, 0]
+          #   angular: [0, 0, 0]
+
+CentroidalManager:
+  nominalCentroidalPoseBaseFrame: World
+  limbWeightListForAnchorFrame:
+    LeftThigh: 1.0
+    RightThigh: 1.0
+  method: DDP
+  horizonDuration: 1.0 # [sec]
+  horizonDt: 0.01 # [sec]
+  ddpMaxIter: 1
+
+robots:
+  # Environment models
+  # sample_field:
+  #   module: MCC/SittingField
+
+  # Robot-specific configurations
+  jvrc1:
+    init_pos:
+      translation: [0.003, 0, 0.825]
+      rotation: [0.999726, 0.0, -0.0233917, 0.0]
+
+    frames:
+      - name: LeftHandGraspFrame
+        parent: l_wrist
+        X_p_f:
+          translation: [0.0, -0.0085, -0.10]
+      - name: RightHandGraspFrame
+        parent: r_wrist
+        X_p_f:
+          translation: [0.0, 0.0085, -0.10]
+      - name: LeftThighFrame
+        parent: L_HIP_Y_S
+        X_p_f:
+          translation: [-0.0677307381928566, 0, -0.20450757563611333]
+          rotation: [0, 1.5242809442976415, 0]
+      - name: RightThighFrame
+        parent: R_HIP_Y_S
+        X_p_f:
+          translation: [-0.0677307381928566, 0, -0.20450757563611333]
+          rotation: [0, 1.5242809442976415, 0]
+
+    CoMTask:
+      dimWeight: [1.0, 1.0, 0.001]
+      activeJoints: [
+      "Root",
+      "R_HIP_Y", "R_HIP_R", "R_HIP_P", "R_KNEE", "R_ANKLE_P", "R_ANKLE_R",
+      "L_HIP_Y", "L_HIP_R", "L_HIP_P", "L_KNEE", "L_ANKLE_P", "L_ANKLE_R"]
+
+    CentroidalManager:
+      nominalCentroidalPose:
+        translation: [0.2, 0.0, 1.0]
+
+    Contacts:
+      Surface:
+        - name: LeftFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: RightFoot
+          vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
+        - name: LeftThigh
+          vertices: [[0.05, 0.03, 0.0], [-0.05, 0.03, 0.0], [-0.05, -0.03, 0.0], [0.05, -0.03, 0.0]]
+        - name: RightThigh
+          vertices: [[0.05, 0.03, 0.0], [-0.05, 0.03, 0.0], [-0.05, -0.03, 0.0], [0.05, -0.03, 0.0]]
+
+      Grasp:
+        - name: LeftHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+        - name: RightHand
+          vertices:
+            - translation: [0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [-0.025, 0.015, 0]
+              rotation: [1.5707963267948966, 0, 0]
+            - translation: [0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]
+            - translation: [-0.025, -0.015, 0]
+              rotation: [-1.5707963267948966, 0, 0]

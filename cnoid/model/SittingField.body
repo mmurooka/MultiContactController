@@ -1,0 +1,21 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: radian
+name: SittingField
+rootLink: Root
+links:
+  -
+    name: Root
+    jointType: fixed
+  -
+    name: BlockThigh
+    parent: Root
+    jointType: fixed
+    material: Field
+    translation: [ 0.2, 0.0, 0.74 ]
+    elements:
+      -
+        type: Shape
+        translation: [ 0, 0, -0.01 ]
+        geometry: { type: Box, size: [ 0.1, 0.5, 0.02 ] }
+        appearance: { material: { diffuseColor: [ 0.3, 0.5, 0.2 ] }}

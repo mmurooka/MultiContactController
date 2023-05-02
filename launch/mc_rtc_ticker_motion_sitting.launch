@@ -1,0 +1,17 @@
+<launch>
+  <node pkg="mc_rtc_ticker" type="mc_rtc_ticker" name="mc_rtc_ticker">
+    <rosparam>
+      <!-- The order of ref_joint_order. -->
+      <!-- See https://github.com/jrl-umi3218/mc_rtc/blob/85ae48d259ad234400dbeaf17be1adcb63160284/src/mc_robots/jvrc1.cpp#L56-L63 -->
+      init_state: [
+      -1.55, 0.0, 0.0, 0.87, 0.0, 0.0,
+      -1.55, 0.0, 0.0, 0.87, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      -0.7, -0.15, 0.0, -1.2, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+      -0.7, 0.15, 0.0, -1.2, 0.0, 0.0, 0.0,
+      0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+      ]
+    </rosparam>
+  </node>
+</launch>
