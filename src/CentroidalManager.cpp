@@ -117,6 +117,8 @@ void CentroidalManager::ControlData::addToLogger(const std::string & baseEntry, 
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_control", controlZmp);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_projectedControl", projectedControlZmp);
   MC_RTC_LOG_HELPER(baseEntry + "_zmp_actual", actualZmp);
+  MC_RTC_LOG_HELPER(baseEntry + "_zmp_targetFoot", targetFootZmp);
+  MC_RTC_LOG_HELPER(baseEntry + "_zmp_actualFoot", actualFootZmp);
   logger.addLogEntry(baseEntry + "_contactRegion_min", this,
                      [this]() -> const Eigen::Vector2d & { return contactRegionMinMax[0]; });
   logger.addLogEntry(baseEntry + "_contactRegion_max", this,
@@ -290,6 +292,20 @@ void CentroidalManager::update()
 
   // Calculate ZMP and contact region
   {
+    controlData_.actualFootCentroidalWrench = sva::ForceVecd::Zero();
+    for(const auto & contactKV : contactList_)
+    {
+      if(contactKV.first.group != Limb::Group::Foot)
+      {
+        continue;
+      }
+
+      const auto & limbTask = ctl().limbTasks_.at(contactKV.first);
+      sva::PTransformd limbPoseFromCom = ctl().realRobot().frame(limbTask->frame().name()).position()
+                                         * sva::PTransformd(controlData_.actualCentroidalPose.translation()).inv();
+      controlData_.actualFootCentroidalWrench += limbPoseFromCom.transMul(limbTask->filteredMeasuredWrench());
+    }
+
     Eigen::Vector3d zmpPlaneOrigin = calcAnchorFrame(ctl().robot()).translation();
     Eigen::Vector3d zmpPlaneNormal = Eigen::Vector3d::UnitZ();
     auto calcZmp = [&](const sva::ForceVecd & wrench, const Eigen::Vector3d & momentOrigin) {
@@ -309,6 +325,10 @@ void CentroidalManager::update()
         calcZmp(controlData_.projectedControlCentroidalWrench, controlData_.mpcCentroidalPose.translation());
     controlData_.actualZmp =
         calcZmp(controlData_.actualCentroidalWrench, controlData_.actualCentroidalPose.translation());
+    controlData_.targetFootZmp =
+        calcZmp(controlData_.targetFootCentroidalWrench, controlData_.mpcCentroidalPose.translation());
+    controlData_.actualFootZmp =
+        calcZmp(controlData_.actualFootCentroidalWrench, controlData_.actualCentroidalPose.translation());
 
     controlData_.contactRegionMinMax = calcContactRegionMinMax();
   }
@@ -627,6 +647,11 @@ std::array<Eigen::Vector2d, 2> CentroidalManager::calcContactRegionMinMax() cons
   Eigen::Vector2d maxPos = Eigen::Vector2d::Constant(std::numeric_limits<double>::lowest());
   for(const auto & contactKV : contactList_)
   {
+    if(contactKV.first.group != Limb::Group::Foot)
+    {
+      continue;
+    }
+
     for(const auto & vertexWithRidge : contactKV.second->vertexWithRidgeList_)
     {
       const Eigen::Vector2d & pos = vertexWithRidge.vertex.head<2>();

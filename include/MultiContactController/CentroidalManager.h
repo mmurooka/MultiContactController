@@ -180,6 +180,11 @@ public:
 
     /** \brief Remove entries from the logger. */
     virtual void removeFromLogger(mc_rtc::Logger & logger);
+
+    sva::ForceVecd targetFootCentroidalWrench = sva::ForceVecd::Zero();
+    sva::ForceVecd actualFootCentroidalWrench = sva::ForceVecd::Zero();
+    Eigen::Vector3d targetFootZmp = Eigen::Vector3d::Zero();
+    Eigen::Vector3d actualFootZmp = Eigen::Vector3d::Zero();
   };
 
 public:

@@ -108,6 +108,18 @@ void CentroidalManagerDDP::runMpc()
       std::bind(&CentroidalManagerDDP::calcMpcRefData, this, std::placeholders::_1), initialParam, ctl().t());
 
   const auto & motionParam = calcMpcMotionParam(ctl().t());
+  const auto & plannedWrenchList = ForceColl::calcWrenchList(motionParam.contact_list, plannedForceScales,
+                                                             controlData_.mpcCentroidalPose.translation());
+  const auto & contactList = ForceColl::getContactVecFromMap(ctl().limbManagerSet_->contactList(ctl().t()));
+  controlData_.targetFootCentroidalWrench = sva::ForceVecd::Zero();
+  for(size_t i = 0; i < motionParam.contact_list.size(); i++)
+  {
+    if(contactList[i]->name_.find("Foot") == std::string::npos)
+    {
+      continue;
+    }
+    controlData_.targetFootCentroidalWrench += plannedWrenchList[i];
+  }
   controlData_.plannedCentroidalWrench = ForceColl::calcTotalWrench(motionParam.contact_list, plannedForceScales,
                                                                     controlData_.mpcCentroidalPose.translation());
   controlData_.plannedCentroidalMomentum = sva::ForceVecd(ddp_->ddp_solver_->controlData().x_list[1].segment<3>(6),
