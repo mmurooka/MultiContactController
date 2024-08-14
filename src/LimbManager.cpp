@@ -377,6 +377,24 @@ void LimbManager::update()
       contactIdx++;
     }
   }
+  {
+    ctl().gui()->removeCategory({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor"});
+
+    const auto & forceSensor = limbTask()->frame().forceSensor();
+    std::string convexVerticesKey = forceSensor.name() + "::convexVertices";
+    if(ctl().datastore().has(convexVerticesKey))
+    {
+      std::vector<Eigen::Vector3d> convexVertices =
+          ctl().datastore().get<std::vector<Eigen::Vector3d>>(convexVerticesKey);
+      for(auto & convexVertex : convexVertices)
+      {
+        convexVertex = (sva::PTransformd(convexVertex) * forceSensor.X_0_f(ctl().robot())).translation();
+      }
+      ctl().gui()->addElement({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor"},
+                              mc_rtc::gui::Polygon("ContactRegion", {mc_rtc::gui::Color::Green, 0.02},
+                                                   [convexVertices]() { return convexVertices; }));
+    }
+  }
 }
 
 void LimbManager::stop()
