@@ -377,22 +377,60 @@ void LimbManager::update()
       contactIdx++;
     }
   }
+
   {
-    ctl().gui()->removeCategory({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor"});
+    ctl().gui()->removeCategory({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor", "ContactMarker"});
 
     const auto & forceSensor = limbTask()->frame().forceSensor();
     std::string convexVerticesKey = forceSensor.name() + "::convexVertices";
     if(ctl().datastore().has(convexVerticesKey))
     {
-      std::vector<Eigen::Vector3d> convexVertices =
+      std::vector<Eigen::Vector3d> globalVertices =
           ctl().datastore().get<std::vector<Eigen::Vector3d>>(convexVerticesKey);
-      for(auto & convexVertex : convexVertices)
+      std::vector<Eigen::Vector3d> localVertices;
+      for(auto & globalVertex : globalVertices)
       {
-        convexVertex = (sva::PTransformd(convexVertex) * forceSensor.X_0_f(ctl().robot())).translation();
+        globalVertex = (sva::PTransformd(globalVertex) * forceSensor.X_0_f(ctl().robot())).translation();
+        localVertices.push_back((sva::PTransformd(globalVertex) * targetPose_.inv()).translation());
       }
-      ctl().gui()->addElement({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor"},
-                              mc_rtc::gui::Polygon("ContactRegion", {mc_rtc::gui::Color::Green, 0.02},
-                                                   [convexVertices]() { return convexVertices; }));
+
+      if(globalVertices.size() > 0)
+      {
+        if(requireUpdateContactFromSensor_)
+        {
+          auto contactCommand = getContactCommand(ctl().t());
+          if(contactCommand)
+          {
+            if(auto surfaceContact = std::dynamic_pointer_cast<ForceColl::SurfaceContact>(contactCommand->constraint))
+            {
+              // The number of elements in localVertices must be the same as before the update.
+              if(surfaceContact->localVertices_.size() == localVertices.size())
+              {
+                mc_rtc::log::info("[LimbManager({})] Update local vertices of surface contact constraint.",
+                                  std::to_string(limb_));
+                surfaceContact->updateLocalVertices(localVertices);
+                surfaceContact->updateGlobalVertices(targetPose_);
+              }
+              else
+              {
+                mc_rtc::log::warning("[LimbManager({})] Try to update local vertices of surface contact constraint, "
+                                     "but the number of vertices does not match: {} != {}",
+                                     std::to_string(limb_), surfaceContact->localVertices_.size(),
+                                     localVertices.size());
+              }
+            }
+          }
+        }
+
+        ctl().gui()->addElement({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor", "ContactMarker"},
+                                mc_rtc::gui::Polygon("ContactRegion", {mc_rtc::gui::Color::Green, 0.02},
+                                                     [globalVertices]() { return globalVertices; }));
+      }
+    }
+
+    if(requireUpdateContactFromSensor_)
+    {
+      requireUpdateContactFromSensor_ = false;
     }
   }
 }
@@ -412,6 +450,8 @@ void LimbManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                  mc_rtc::gui::Label("gripperCommandListSize", [this]() { return gripperCommandList_.size(); }),
                  mc_rtc::gui::Label("phase", [this]() -> const std::string & { return phase_; }),
                  mc_rtc::gui::Label("impGainType", [this]() -> const std::string & { return impGainType_; }));
+  gui.addElement({ctl().name(), config_.name, std::to_string(limb_), "TactileSensor"},
+                 mc_rtc::gui::Button("UpdateContactFromSensor", [this]() { requireUpdateContactFromSensor_ = true; }));
 }
 
 void LimbManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)

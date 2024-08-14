@@ -261,5 +261,8 @@ protected:
 
   //! Whether to require updating target pose for contact constraint
   bool requireTouchDownPoseUpdate_ = false;
+
+  //! Whether to require updating contact region from tactile sensor measurements
+  bool requireUpdateContactFromSensor_ = false;
 };
 } // namespace MCC
