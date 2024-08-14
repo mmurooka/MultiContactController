@@ -38,5 +38,11 @@ protected:
 
   //! Stiffness of momentum task
   Eigen::Vector6d momentumTaskStiffness_ = Eigen::Vector6d::Zero();
+
+  //! Stiffness of thigh relative pose task
+  Eigen::Vector6d thighRelPoseTaskStiffness_ = Eigen::Vector6d::Zero();
+
+  //! Stiffness of foot relative pose task
+  Eigen::Vector6d footRelPoseTaskStiffness_ = Eigen::Vector6d::Zero();
 };
 } // namespace MCC

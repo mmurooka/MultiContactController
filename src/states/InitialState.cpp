@@ -2,6 +2,7 @@
 #include <mc_tasks/CoMTask.h>
 #include <mc_tasks/MomentumTask.h>
 #include <mc_tasks/OrientationTask.h>
+#include <mc_tasks/RelativeEndEffectorTask.h>
 
 #include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
@@ -49,12 +50,20 @@ bool InitialState::run(mc_control::fsm::Controller &)
     ctl().momentumTask_->reset();
     ctl().momentumTask_->momentum(sva::ForceVecd::Zero());
     ctl().solver().addTask(ctl().momentumTask_);
+    ctl().thighRelPoseTask_->reset();
+    ctl().solver().addTask(ctl().thighRelPoseTask_);
+    ctl().footRelPoseTask_->reset();
+    ctl().solver().addTask(ctl().footRelPoseTask_);
     // limb tasks are added in LimbManager
 
     // Setup task stiffness interpolation
     comTaskStiffness_ = ctl().comTask_->dimStiffness();
     baseOriTaskStiffness_ = ctl().baseOriTask_->dimStiffness();
     momentumTaskStiffness_ = ctl().momentumTask_->dimStiffness();
+    thighRelPoseTaskStiffness_.head<3>() = ctl().thighRelPoseTask_->orientationTask->dimStiffness();
+    thighRelPoseTaskStiffness_.tail<3>() = ctl().thighRelPoseTask_->positionTask->dimStiffness();
+    footRelPoseTaskStiffness_.head<3>() = ctl().footRelPoseTask_->orientationTask->dimStiffness();
+    footRelPoseTaskStiffness_.tail<3>() = ctl().footRelPoseTask_->positionTask->dimStiffness();
     // Do not interpolate the stiffness of the limb tasks because the current pose is retained as the target pose
     constexpr double stiffnessInterpDuration = 1.0; // [sec]
     stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
@@ -155,6 +164,10 @@ bool InitialState::run(mc_control::fsm::Controller &)
       ctl().comTask_->stiffness(stiffnessRatio * comTaskStiffness_);
       ctl().baseOriTask_->stiffness(stiffnessRatio * baseOriTaskStiffness_);
       ctl().momentumTask_->stiffness(stiffnessRatio * momentumTaskStiffness_);
+      ctl().thighRelPoseTask_->orientationTask->stiffness(stiffnessRatio * thighRelPoseTaskStiffness_.head<3>());
+      ctl().thighRelPoseTask_->positionTask->stiffness(stiffnessRatio * thighRelPoseTaskStiffness_.tail<3>());
+      ctl().footRelPoseTask_->orientationTask->stiffness(stiffnessRatio * footRelPoseTaskStiffness_.head<3>());
+      ctl().footRelPoseTask_->positionTask->stiffness(stiffnessRatio * footRelPoseTaskStiffness_.tail<3>());
     }
     else
     {

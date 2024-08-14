@@ -5,6 +5,7 @@
 #include <mc_tasks/MetaTaskLoader.h>
 #include <mc_tasks/MomentumTask.h>
 #include <mc_tasks/OrientationTask.h>
+#include <mc_tasks/RelativeEndEffectorTask.h>
 
 #include <ForceColl/Contact.h>
 
@@ -87,6 +88,26 @@ MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
   else
   {
     mc_rtc::log::warning("[MultiContactController] LimbTaskList configuration is missing.");
+  }
+  if(config().has("ThighRelPoseTask"))
+  {
+    thighRelPoseTask_ =
+        mc_tasks::MetaTaskLoader::load<mc_tasks::RelativeEndEffectorTask>(solver(), config()("ThighRelPoseTask"));
+    thighRelPoseTask_->name("ThighRelPoseTask");
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] ThighRelPoseTask configuration is missing.");
+  }
+  if(config().has("FootRelPoseTask"))
+  {
+    footRelPoseTask_ =
+        mc_tasks::MetaTaskLoader::load<mc_tasks::RelativeEndEffectorTask>(solver(), config()("FootRelPoseTask"));
+    footRelPoseTask_->name("FootRelPoseTask");
+  }
+  else
+  {
+    mc_rtc::log::warning("[MultiContactController] FootRelPoseTask configuration is missing.");
   }
 
   // Setup managers
@@ -218,6 +239,8 @@ void MultiContactController::stop()
   {
     solver().removeTask(limbTaskKV.second);
   }
+  solver().removeTask(thighRelPoseTask_);
+  solver().removeTask(footRelPoseTask_);
 
   // Clean up managers
   limbManagerSet_->stop();

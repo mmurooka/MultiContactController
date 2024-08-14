@@ -9,6 +9,7 @@ namespace mc_tasks
 struct CoMTask;
 struct OrientationTask;
 struct MomentumTask;
+struct RelativeEndEffectorTask;
 
 namespace force
 {
@@ -92,6 +93,12 @@ public:
 
   //! Limb tasks
   std::unordered_map<Limb, std::shared_ptr<mc_tasks::force::FirstOrderImpedanceTask>> limbTasks_;
+
+  //! Thigh relative pose task
+  std::shared_ptr<mc_tasks::RelativeEndEffectorTask> thighRelPoseTask_;
+
+  //! Foot relative pose task
+  std::shared_ptr<mc_tasks::RelativeEndEffectorTask> footRelPoseTask_;
 
   //! Limb manager set
   std::shared_ptr<LimbManagerSet> limbManagerSet_;
