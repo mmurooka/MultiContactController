@@ -4,6 +4,7 @@
 #include <mc_rtc/gui/ArrayInput.h>
 #include <mc_rtc/gui/Label.h>
 
+#include <MultiContactController/CentroidalManager.h>
 #include <MultiContactController/LimbManagerSet.h>
 #include <MultiContactController/MultiContactController.h>
 #include <MultiContactController/swing/SwingTrajCubicSplineSimple.h>
@@ -71,9 +72,30 @@ void LimbManagerSet::reset(const mc_rtc::Configuration & constraintSetConfig)
 
 void LimbManagerSet::update()
 {
+  contactVerticesFromTactileSensor_.clear();
+
   for(const auto & limbManagerKV : *this)
   {
     limbManagerKV.second->update();
+  }
+
+  if(contactVerticesFromTactileSensor_.size() > 0)
+  {
+    double contactVerticesMeanZ = 0.0;
+    Eigen::Vector2d vertexMin = Eigen::Vector2d::Constant(std::numeric_limits<double>::max());
+    Eigen::Vector2d vertexMax = Eigen::Vector2d::Constant(std::numeric_limits<double>::lowest());
+    for(const auto & contactVertex : contactVerticesFromTactileSensor_)
+    {
+      vertexMin = vertexMin.cwiseMin(contactVertex.head<2>());
+      vertexMax = vertexMax.cwiseMax(contactVertex.head<2>());
+      contactVerticesMeanZ += contactVertex.z();
+    }
+    contactVerticesMeanZ /= static_cast<double>(contactVerticesFromTactileSensor_.size());
+    contactCenterFromTactileSensor_ << 0.5 * (vertexMin + vertexMax), contactVerticesMeanZ;
+  }
+  else
+  {
+    contactCenterFromTactileSensor_ = Eigen::Vector3d::Zero();
   }
 
   if(config_.timeRequireUpdateContactFromSensor > 0 && ctl().t() >= config_.timeRequireUpdateContactFromSensor)
@@ -145,12 +167,22 @@ void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
   }
 
   gui.addElement({ctl().name(), config_.name, "TactileSensor"},
-                 mc_rtc::gui::Button("UpdateContactFromSensor", [this]() {
-                   for(const auto & limbManagerKV : *this)
-                   {
-                     limbManagerKV.second->requireUpdateContactFromSensor_ = true;
-                   }
-                 }));
+                 mc_rtc::gui::Button("UpdateComFromSensor",
+                                     [this]() {
+                                       sva::PTransformd nominalCentroidalPose =
+                                           ctl().centroidalManager_->getNominalCentroidalPose(ctl().t());
+                                       nominalCentroidalPose.translation().x() = contactCenterFromTactileSensor_.x();
+                                       ctl().centroidalManager_->appendNominalCentroidalPose(ctl().t() + 1.0,
+                                                                                             nominalCentroidalPose);
+                                     }),
+                 mc_rtc::gui::Button("UpdateContactFromSensor",
+                                     [this]() {
+                                       for(const auto & limbManagerKV : *this)
+                                       {
+                                         limbManagerKV.second->requireUpdateContactFromSensor_ = true;
+                                       }
+                                     }),
+                 mc_rtc::gui::Point3DRO("contactCenterFromTactileSensor", contactCenterFromTactileSensor_));
 
   for(const auto & groupLimbsKV : groupLimbsMap_)
   {

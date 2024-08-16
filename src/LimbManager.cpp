@@ -396,6 +396,10 @@ void LimbManager::update()
 
       if(globalVertices.size() > 0)
       {
+        ctl().limbManagerSet_->contactVerticesFromTactileSensor_.insert(
+            ctl().limbManagerSet_->contactVerticesFromTactileSensor_.end(), globalVertices.begin(),
+            globalVertices.end());
+
         if(requireUpdateContactFromSensor_)
         {
           auto contactCommand = getContactCommand(ctl().t());

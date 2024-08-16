@@ -256,6 +256,11 @@ public:
   */
   bool isFinished(const double t) const;
 
+  /** \brief Get nominal centroidal pose.
+      \param t time
+   */
+  sva::PTransformd getNominalCentroidalPose(double t) const;
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const MultiContactController & ctl() const
@@ -289,11 +294,6 @@ protected:
       \param recursive whether it is called recursively
    */
   sva::PTransformd calcLimbAveragePoseForRefData(double t, bool recursive) const;
-
-  /** \brief Get nominal centroidal pose.
-      \param t time
-   */
-  sva::PTransformd getNominalCentroidalPose(double t) const;
 
   /** \brief Calculate min/max points of contact region. */
   std::array<Eigen::Vector2d, 2> calcContactRegionMinMax() const;

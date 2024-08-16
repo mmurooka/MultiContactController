@@ -135,6 +135,13 @@ protected:
     return *ctlPtr_;
   }
 
+public:
+  //! Contact vertices obtained from tactile sensor
+  std::vector<Eigen::Vector3d> contactVerticesFromTactileSensor_;
+
+  //! Center of contact vertices obtained from tactile sensor
+  Eigen::Vector3d contactCenterFromTactileSensor_;
+
 protected:
   //! Configuration
   Configuration config_;
