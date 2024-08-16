@@ -56,7 +56,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     baseOriTaskStiffness_ = ctl().baseOriTask_->dimStiffness();
     momentumTaskStiffness_ = ctl().momentumTask_->dimStiffness();
     // Do not interpolate the stiffness of the limb tasks because the current pose is retained as the target pose
-    constexpr double stiffnessInterpDuration = 1.0; // [sec]
+    constexpr double stiffnessInterpDuration = 0.5; // [sec]
     stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
         std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
 
