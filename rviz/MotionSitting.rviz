@@ -8,6 +8,7 @@ Panels:
         - /RealRobotModel1
         - /RealRobotModel1/Links1
         - /TF1/Frames1
+        - /TactileSensorMarkerLeft1
         - /TactileSensorMarkerLeft1/Namespaces1
       Splitter Ratio: 0.42398425936698914
     Tree Height: 276
@@ -426,13 +427,16 @@ Visualization Manager:
       Update Topic: /mc_rtc_rviz_interactive_markers/update
       Value: false
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /mc_rtc_rviz
       Name: mc_rtc GUI markers
       Namespaces:
-        {}
+        MCC/CentroidalManager/ForceMarker/LeftThigh_SurfaceRegion: true
+        MCC/CentroidalManager/ForceMarker/RightThigh_SurfaceRegion: true
+        MCC/LimbManager/LeftThigh/TactileSensor/ContactMarker/ContactRegion: true
+        MCC/LimbManager/RightThigh/TactileSensor/ContactMarker/ContactRegion: true
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/TF
       Enabled: false
       Frame Timeout: 1000
@@ -476,7 +480,7 @@ Visualization Manager:
   Global Options:
     Background Color: 255; 255; 255
     Default Light: true
-    Fixed Frame: real/jvrc1_left_thigh_tactile_sensor
+    Fixed Frame: robot_map
     Frame Rate: 30
   Name: root
   Tools:
@@ -500,7 +504,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.0079944133758545
+      Distance: 1.262325406074524
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -508,17 +512,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.13106989860534668
-        Y: -0.09555735439062119
-        Z: 0.07649573683738708
+        X: 0.2015434205532074
+        Y: 0.021703394129872322
+        Z: 0.730118453502655
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.8796004056930542
+      Pitch: -0.7851308584213257
       Target Frame: <Fixed Frame>
-      Yaw: 4.330404281616211
+      Yaw: 4.740828990936279
     Saved: ~
 Window Geometry:
   Displays:

@@ -56,6 +56,7 @@ LimbTaskList:
     weight: 1000.0
 
 LimbManagerSet:
+  timeRequireUpdateContactFromSensor: 2.0 # [s]
   LimbManager:
     LeftThigh:
       impedanceGains:
@@ -133,12 +134,12 @@ robots:
       - name: LeftThighFrame
         parent: L_HIP_Y_S
         X_p_f:
-          translation: [-0.0677307381928566, 0, -0.20450757563611333]
+          translation: [-0.0677307381928566, 0, -0.17450757563611333]
           rotation: [0, 1.5242809442976415, 0]
       - name: RightThighFrame
         parent: R_HIP_Y_S
         X_p_f:
-          translation: [-0.0677307381928566, 0, -0.20450757563611333]
+          translation: [-0.0677307381928566, 0, -0.17450757563611333]
           rotation: [0, 1.5242809442976415, 0]
 
     CoMTask:
@@ -159,9 +160,9 @@ robots:
         - name: RightFoot
           vertices: [[-0.1, -0.04, 0.0], [-0.1, 0.04, 0.0], [0.1, 0.04, 0.0], [0.1, -0.04, 0.0]]
         - name: LeftThigh
-          vertices: [[0.05, 0.03, 0.0], [-0.05, 0.03, 0.0], [-0.05, -0.03, 0.0], [0.05, -0.03, 0.0]]
+          vertices: [[0.09, 0.03, 0.0], [-0.09, 0.03, 0.0], [-0.09, -0.03, 0.0], [0.09, -0.03, 0.0]]
         - name: RightThigh
-          vertices: [[0.05, 0.03, 0.0], [-0.05, 0.03, 0.0], [-0.05, -0.03, 0.0], [0.05, -0.03, 0.0]]
+          vertices: [[0.09, 0.03, 0.0], [-0.09, 0.03, 0.0], [-0.09, -0.03, 0.0], [0.09, -0.03, 0.0]]
 
       Grasp:
         - name: LeftHand

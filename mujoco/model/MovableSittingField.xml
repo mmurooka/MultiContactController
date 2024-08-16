@@ -4,7 +4,7 @@
 
   <worldbody>
     <body name="block">
-      <joint name="pitch" axis="0 1 0" range="-0.5 0.5" stiffness="100.0" damping="200.0" armature="100.0"
+      <joint name="pitch" axis="0 1 0" range="-1.0 1.0" stiffness="40.0" damping="120.0" armature="50.0"
              pos="0.2 0 0.73"/>
       <geom type="box" rgba="0.3 0.5 0.2 1"
             condim="3" group="1" density="0"
