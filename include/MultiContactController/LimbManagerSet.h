@@ -15,6 +15,9 @@ class LimbManagerSet : public std::unordered_map<Limb, std::shared_ptr<LimbManag
     //! Name
     std::string name = "LimbManagerSet";
 
+    //! Time to require updating contact region from tactile sensor measurements [s]
+    double timeRequireUpdateContactFromSensor = -1.0;
+
     /** \brief Load mc_rtc configuration.
         \param mcRtcConfig mc_rtc configuration
     */

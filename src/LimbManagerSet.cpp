@@ -13,6 +13,7 @@ using namespace MCC;
 void LimbManagerSet::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
 {
   mcRtcConfig("name", name);
+  mcRtcConfig("timeRequireUpdateContactFromSensor", timeRequireUpdateContactFromSensor);
 }
 
 LimbManagerSet::LimbManagerSet(MultiContactController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
@@ -74,6 +75,16 @@ void LimbManagerSet::update()
   {
     limbManagerKV.second->update();
   }
+
+  if(config_.timeRequireUpdateContactFromSensor > 0 && ctl().t() >= config_.timeRequireUpdateContactFromSensor)
+  {
+    for(const auto & limbManagerKV : *this)
+    {
+      limbManagerKV.second->requireUpdateContactFromSensor_ = true;
+    }
+
+    config_.timeRequireUpdateContactFromSensor = -1.0;
+  }
 }
 
 void LimbManagerSet::stop()
@@ -132,6 +143,14 @@ void LimbManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
   {
     limbManagerKV.second->addToGUI(gui);
   }
+
+  gui.addElement({ctl().name(), config_.name, "TactileSensor"},
+                 mc_rtc::gui::Button("UpdateContactFromSensor", [this]() {
+                   for(const auto & limbManagerKV : *this)
+                   {
+                     limbManagerKV.second->requireUpdateContactFromSensor_ = true;
+                   }
+                 }));
 
   for(const auto & groupLimbsKV : groupLimbsMap_)
   {
