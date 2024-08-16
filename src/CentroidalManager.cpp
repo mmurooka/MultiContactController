@@ -647,10 +647,10 @@ std::array<Eigen::Vector2d, 2> CentroidalManager::calcContactRegionMinMax() cons
   Eigen::Vector2d maxPos = Eigen::Vector2d::Constant(std::numeric_limits<double>::lowest());
   for(const auto & contactKV : contactList_)
   {
-    if(contactKV.first.group != Limb::Group::Foot)
-    {
-      continue;
-    }
+    // if(contactKV.first.group != Limb::Group::Foot)
+    // {
+    //   continue;
+    // }
 
     for(const auto & vertexWithRidge : contactKV.second->vertexWithRidgeList_)
     {
