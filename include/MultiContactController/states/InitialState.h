@@ -23,6 +23,9 @@ protected:
   /** \brief Check whether state is completed. */
   bool complete() const;
 
+  /** \brief Move to initial posture. */
+  void moveToInitialPosture();
+
 protected:
   //! Phase
   int phase_ = 0;

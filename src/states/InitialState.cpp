@@ -18,7 +18,8 @@ void InitialState::start(mc_control::fsm::Controller & _ctl)
   phase_ = 0;
 
   // Setup GUI
-  ctl().gui()->addElement({ctl().name()}, mc_rtc::gui::Button("Start", [this]() { phase_ = 1; }));
+  ctl().gui()->addElement({ctl().name()},
+                          mc_rtc::gui::Button("MoveToInitialPosture", [this]() { moveToInitialPosture(); }));
 
   output("OK");
 }
@@ -28,11 +29,11 @@ bool InitialState::run(mc_control::fsm::Controller &)
   if(phase_ == 0)
   {
     // Auto start
-    if(config_.has("configs") && config_("configs").has("autoStartTime")
-       && ctl().t() > static_cast<double>(config_("configs")("autoStartTime")))
-    {
-      phase_ = 1;
-    }
+    // if(config_.has("configs") && config_("configs").has("autoStartTime")
+    //    && ctl().t() > static_cast<double>(config_("configs")("autoStartTime")))
+    // {
+    //   phase_ = 1;
+    // }
   }
   if(phase_ == 1)
   {
@@ -191,6 +192,28 @@ bool InitialState::complete() const
   }
 
   return true;
+}
+
+void InitialState::moveToInitialPosture()
+{
+  if(config_.has("configs") && config_("configs").has("initialPosture"))
+  {
+    auto postureTask = ctl().getPostureTask(ctl().robot().name());
+    postureTask->load(ctl().solver(), config_("configs")("initialPosture"));
+  }
+
+  ctl().gui()->removeElement({ctl().name()}, "MoveToInitialPosture");
+  ctl().gui()->addElement({ctl().name()}, mc_rtc::gui::Button("ReloadPostureConfig", [this]() {
+                            if(ctl().config().has("PostureTask"))
+                            {
+                              auto postureTask = ctl().getPostureTask(ctl().robot().name());
+                              postureTask->load(ctl().solver(), ctl().config()("PostureTask"));
+                            }
+
+                            ctl().gui()->removeElement({ctl().name()}, "ReloadPostureConfig");
+                            ctl().gui()->addElement({ctl().name()},
+                                                    mc_rtc::gui::Button("Start", [this]() { phase_ = 1; }));
+                          }));
 }
 
 EXPORT_SINGLE_STATE("MCC::Initial", InitialState)
