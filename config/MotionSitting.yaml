@@ -110,6 +110,16 @@ CentroidalManager:
   horizonDt: 0.01 # [sec]
   ddpMaxIter: 1
 
+additionalForceSensors:
+  - name: LeftThighForceSensor
+    parentBody: L_HIP_Y_S
+    X_p_f:
+      translation: [0, 0, 0]
+  - name: RightThighForceSensor
+    parentBody: R_HIP_Y_S
+    X_p_f:
+      translation: [0, 0, 0]
+
 robots:
   # Environment models
   # sample_field:

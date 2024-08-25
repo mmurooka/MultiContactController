@@ -1,4 +1,4 @@
 sensors:
-  - topicName: /mujoco/tactile_sensor
+  - topicName: /mujoco/tactile_sensor/left_knee
     tactileSensorFrameName: jvrc1_left_knee_tactile_sensor
     forceSensorName: LeftKneeForceSensor

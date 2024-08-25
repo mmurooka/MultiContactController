@@ -1,4 +1,4 @@
 sensors:
-  - topicName: /mujoco/tactile_sensor
+  - topicName: /mujoco/tactile_sensor/right_elbow
     tactileSensorFrameName: jvrc1_right_elbow_tactile_sensor
     forceSensorName: RightElbowForceSensor

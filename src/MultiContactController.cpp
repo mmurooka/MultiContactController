@@ -17,10 +17,23 @@
 
 using namespace MCC;
 
+mc_rbdyn::RobotModulePtr addForceSensors(mc_rbdyn::RobotModulePtr rm, const mc_rtc::Configuration & _config)
+{
+  if(_config.has("additionalForceSensors"))
+  {
+    for(const auto & forceSensorConfig : _config("additionalForceSensors"))
+    {
+      mc_rtc::log::success("[MultiContactController] Add force sensor {}", forceSensorConfig("name"));
+      rm->_forceSensors.push_back(static_cast<mc_rbdyn::ForceSensor>(forceSensorConfig));
+    }
+  }
+  return rm;
+}
+
 MultiContactController::MultiContactController(mc_rbdyn::RobotModulePtr rm,
                                                double dt,
                                                const mc_rtc::Configuration & _config)
-: mc_control::fsm::Controller(rm, dt, _config)
+: mc_control::fsm::Controller(addForceSensors(rm, _config), dt, _config)
 {
   // Get the robot-specific configuration
   auto rconfig = config()("robots")(robot().module().name);

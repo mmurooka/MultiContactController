@@ -1,7 +1,7 @@
 sensors:
-  - topicName: /mujoco/tactile_sensor/left
+  - topicName: /mujoco/tactile_sensor/left_thigh
     tactileSensorFrameName: jvrc1_left_thigh_tactile_sensor
     forceSensorName: LeftThighForceSensor
-  - topicName: /mujoco/tactile_sensor/right
+  - topicName: /mujoco/tactile_sensor/right_thigh
     tactileSensorFrameName: jvrc1_right_thigh_tactile_sensor
     forceSensorName: RightThighForceSensor

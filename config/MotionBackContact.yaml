@@ -103,6 +103,12 @@ CentroidalManager:
   horizonDt: 0.01 # [sec]
   ddpMaxIter: 1
 
+additionalForceSensors:
+  - name: BackForceSensor
+    parentBody: WAIST_R_S
+    X_p_f:
+      translation: [0, 0, 0]
+
 robots:
   # Environment models
   sample_field:
