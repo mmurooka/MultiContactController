@@ -1,0 +1,10 @@
+<launch>
+  <node pkg="mujoco_tactile_sensor_plugin" type="MarkerPublisher" name="marker_publisher"
+        output="screen">
+    <remap from="tactile_sensor" to="/mujoco/tactile_sensor/left_knee"/>
+    <remap from="marker_arr" to="/mujoco/tactile_sensor/left_knee/marker_arr"/>
+  </node>
+
+  <node pkg="rviz" type="rviz" name="$(anon rviz)"
+        args="-d $(find multi_contact_controller)/rviz/MotionKneeContact.rviz" output="screen"/>
+</launch>

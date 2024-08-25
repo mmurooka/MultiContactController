@@ -4,11 +4,8 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /RealRobotModel1
         - /RealRobotModel1/Links1
         - /TF1/Frames1
-        - /TactileSensorMarkerLeft1/Namespaces1
       Splitter Ratio: 0.42398425936698914
     Tree Height: 276
   - Class: rviz/Selection
@@ -426,13 +423,42 @@ Visualization Manager:
       Update Topic: /mc_rtc_rviz_interactive_markers/update
       Value: false
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /mc_rtc_rviz
       Name: mc_rtc GUI markers
       Namespaces:
-        {}
+        MCC/CentroidalManager/ForceMarker/LeftFoot_Force0_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_Force1_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_Force2_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_Force3_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_FricPyramid0_edges: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_FricPyramid1_edges: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_FricPyramid2_edges: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_FricPyramid3_edges: true
+        MCC/CentroidalManager/ForceMarker/LeftFoot_SurfaceRegion: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_Force0_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_Force1_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_Force2_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_Force3_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_FricPyramid0_edges: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_FricPyramid1_edges: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_FricPyramid2_edges: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_FricPyramid3_edges: true
+        MCC/CentroidalManager/ForceMarker/RightElbow_SurfaceRegion: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_Force0_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_Force1_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_Force2_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_Force3_arrow_arrow: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_FricPyramid0_edges: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_FricPyramid1_edges: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_FricPyramid2_edges: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_FricPyramid3_edges: true
+        MCC/CentroidalManager/ForceMarker/RightFoot_SurfaceRegion: true
+        MCC/LimbManager/LeftFoot/ContactMarker/LeftFoot_0/LeftFoot_SurfaceRegion: true
+        MCC/LimbManager/RightElbow/ContactMarker/RightElbow_0/RightElbow_SurfaceRegion: true
+        MCC/LimbManager/RightFoot/ContactMarker/RightFoot_0/RightFoot_SurfaceRegion: true
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/TF
       Enabled: false
       Frame Timeout: 1000
@@ -450,33 +476,17 @@ Visualization Manager:
       Value: false
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /mujoco/tactile_sensor/marker_arr
+      Marker Topic: /mujoco/tactile_sensor/right_elbow/marker_arr
       Name: TactileSensorMarker
       Namespaces:
         sensor: true
       Queue Size: 1000
       Value: true
-    - Class: rviz/MarkerArray
-      Enabled: false
-      Marker Topic: /mujoco/tactile_sensor/marker_arr/left
-      Name: TactileSensorMarkerLeft
-      Namespaces:
-        {}
-      Queue Size: 1000
-      Value: false
-    - Class: rviz/MarkerArray
-      Enabled: false
-      Marker Topic: /mujoco/tactile_sensor/marker_arr/right
-      Name: TactileSensorMarkerRight
-      Namespaces:
-        {}
-      Queue Size: 1000
-      Value: false
   Enabled: true
   Global Options:
     Background Color: 255; 255; 255
     Default Light: true
-    Fixed Frame: real/jvrc1_right_elbow_tactile_sensor
+    Fixed Frame: robot_map
     Frame Rate: 30
   Name: root
   Tools:
@@ -500,7 +510,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.5195480585098267
+      Distance: 3.493516206741333
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -508,17 +518,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.030154800042510033
-        Y: 0.007354672998189926
-        Z: 0.09388421475887299
+        X: -0.20450283586978912
+        Y: 0.1980743259191513
+        Z: 0.5444138646125793
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -1.0596011877059937
+      Pitch: 0.3603985905647278
       Target Frame: <Fixed Frame>
-      Yaw: 4.255417346954346
+      Yaw: 5.338571548461914
     Saved: ~
 Window Geometry:
   Displays:
