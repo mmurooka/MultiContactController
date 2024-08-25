@@ -3,7 +3,8 @@
   <option noslip_iterations="50" noslip_tolerance="1e-10"/>
 
   <asset>
-    <hfield name="knee_contact_hfield" file="/home/mmurooka/ros/ws_bwc/src/isri-aist/MultiContactController/mujoco/model/knee_contact_hfield.png"
+    <!-- Manually modify the following path. -->
+    <hfield name="knee_contact_hfield" file="/root/catkin_ws/src/isri-aist/MultiContactController/mujoco/model/knee_contact_hfield.png"
             size="0.05 0.05 0.001 0.01"/>
   </asset>
   <worldbody>
