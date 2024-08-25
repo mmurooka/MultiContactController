@@ -221,6 +221,11 @@ robots:
         X_p_f:
           translation: [-0.06975397769348207, 0, -0.0720193897773116]
           rotation: [0, 1.5708, 0]
+      - name: jvrc1_right_elbow_tactile_sensor
+        parent: R_ELBOW_P_S
+        X_p_f:
+          translation: [-0.06975397769348207, 0, -0.0720193897773116]
+          rotation: [0, 1.5708, 0]
 
     Contacts:
       Surface:

@@ -5,6 +5,8 @@
     <remap from="marker_arr" to="/mujoco/tactile_sensor/left_knee/marker_arr"/>
   </node>
 
+  <node pkg="tf" type="static_transform_publisher" name="tactile_frame_broadcaster" args="0.11161884184098951 -3.042248147844262e-09 -0.1063933713699532 3.141590255540823 -1.5204375874732723 -3.1415901265290733 real/L_KNEE_S real/jvrc1_left_knee_tactile_sensor 30" />
+
   <node pkg="rviz" type="rviz" name="$(anon rviz)"
         args="-d $(find multi_contact_controller)/rviz/MotionKneeContact.rviz" output="screen"/>
 </launch>

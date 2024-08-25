@@ -5,6 +5,8 @@
     <remap from="marker_arr" to="/mujoco/tactile_sensor/right_elbow/marker_arr"/>
   </node>
 
+  <node pkg="tf" type="static_transform_publisher" name="tactile_frame_broadcaster" args="-0.06975397769348207 0 -0.0720193897773116 0 1.5708 0 real/R_ELBOW_P_S real/jvrc1_right_elbow_tactile_sensor 30" />
+
   <node pkg="rviz" type="rviz" name="$(anon rviz)"
         args="-d $(find multi_contact_controller)/rviz/MotionElbowContactWalk.rviz" output="screen"/>
 </launch>
