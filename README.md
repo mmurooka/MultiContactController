@@ -43,6 +43,7 @@ $ docker run --gpus all --rm -it \
   --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
   ghcr.io/mmurooka/multi_contact_controller:RAL2024 ./MotionElbowContactWalk.bash
 ```
+https://github.com/user-attachments/assets/0bd3fa6f-5992-43cc-be2d-aee5a5c6934e
 
 - Standing with the left knee in contact with the environment.
 ```console
@@ -50,5 +51,6 @@ $ docker run --gpus all --rm -it \
   --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
   ghcr.io/mmurooka/multi_contact_controller:RAL2024 ./MotionKneeContact.bash
 ```
+https://github.com/user-attachments/assets/97c369f5-e0ea-4199-bc4a-2f76f5b15046
 
 The Docker image is automatically updated on [CI](https://github.com/mmurooka/MultiContactController/actions/workflows/docker.yaml) from [this Dockerfile](https://github.com/mmurooka/MultiContactController/blob/RAL2024/.github/workflows/Dockerfile).
