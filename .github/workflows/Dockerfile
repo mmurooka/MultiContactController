@@ -49,7 +49,7 @@ RUN git remote add mmurooka https://github.com/mmurooka/jvrc_mj_description && \
 RUN mkdir ${HOME}/mujoco/mc_mujoco/build
 WORKDIR ${HOME}/mujoco/mc_mujoco/build
 RUN cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=${HOME}/mujoco/mujoco-${MUJOCO_VERSION}
-RUN make & make install
+RUN make && make install
 
 # Enable nvidia
 # https://qiita.com/eisoku9618/items/c2cca0f0bf764def2efd
@@ -99,7 +99,7 @@ RUN git clone --recursive https://github.com/isri-aist/McRtcTactileSensorPlugin
 RUN mkdir ${HOME}/src/McRtcTactileSensorPlugin/build
 WORKDIR ${HOME}/src/McRtcTactileSensorPlugin/build
 RUN source ${HOME}/catkin_ws/devel/setup.bash && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_ESKIN=OFF
-RUN source ${HOME}/catkin_ws/devel/setup.bash && make & make install
+RUN source ${HOME}/catkin_ws/devel/setup.bash && make && make install
 
 # Setup simulation
 WORKDIR ${HOME}
