@@ -79,7 +79,7 @@ jobs:
           FFMPEG_PID=$!
           ${HOME}/${{ matrix.motion-type }}.bash &
           SCRIPT_PID=$!
-          SLEEP_DURATION="90s"
+          SLEEP_DURATION="100s"
           sleep ${SLEEP_DURATION}
           kill -2 ${SCRIPT_PID}
           kill -2 ${FFMPEG_PID}
@@ -91,5 +91,5 @@ jobs:
       - name: Upload simulation data
         uses: actions/upload-artifact@v3
         with:
-          name: BWC-docker-results
+          name: MCC-docker-results-RAL2024
           path: /tmp/results
