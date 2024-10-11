@@ -7,6 +7,8 @@ Humanoid controller for whole-body multi-contact motion using tactile sensors
 
 **For general information about MultiContactController, please refer to [the README in the origin/master branch](https://github.com/isri-aist/MultiContactController). The following describes only the information specific to whole-body multi-contact motion using tactile sensors.**
 
+https://github.com/user-attachments/assets/a50d2b41-d93f-4e4c-8ca2-74fba00e194f
+
 [![CI](https://github.com/mmurooka/MultiContactController/actions/workflows/docker.yaml/badge.svg)](https://github.com/mmurooka/MultiContactController/actions/workflows/docker.yaml)
 [![Docker](https://img.shields.io/badge/Docker%20image-ready-blue)](https://github.com/mmurooka/MultiContactController/pkgs/container/multi_contact_controller)
 
