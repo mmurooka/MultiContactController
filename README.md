@@ -1,7 +1,9 @@
 # [MultiContactController](https://github.com/isri-aist/MultiContactController)
 Humanoid controller for whole-body multi-contact motion using tactile sensors
 
-**This is a branch dedicated to reproduce the simulation experiments of the paper on whole-body multi-contact motion using tactile sensors (to be published in the future). The features in this branch will be merged into [the origin/master branch](https://github.com/isri-aist/MultiContactController) in the future.**
+**This is a branch dedicated to reproduce the simulation experiments of the paper on whole-body multi-contact motion using tactile sensors [1]. The features in this branch will be merged into [the origin/master branch](https://github.com/isri-aist/MultiContactController) in the future.**
+
+- [1] M. Murooka, et al., "Whole-Body Multi-Contact Motion Control for Humanoid Robots Based on Distributed Tactile Sensors", IEEE Robotics and Automation Letters, 2024. https://doi.org/10.1109/LRA.2024.3475052
 
 **For general information about MultiContactController, please refer to [the README in the origin/master branch](https://github.com/isri-aist/MultiContactController). The following describes only the information specific to whole-body multi-contact motion using tactile sensors.**
 
